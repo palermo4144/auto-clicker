@@ -1,0 +1,52 @@
+import pyautogui
+import time
+import threading
+import keyboard
+
+# Variables
+clicking = False  # To track clicking state
+
+
+def clicker():
+    """
+    Function to perform clicking as long as the `clicking` flag is True.
+    """
+    while True:
+        if clicking:
+            pyautogui.click()
+        time.sleep(0.01)  # Adjust for click speed
+
+
+def toggle_clicking():
+    """
+    Toggle the clicking state on/off.
+    """
+    global clicking
+    clicking = not clicking
+    print(f"Auto-clicker {'started' if clicking else 'stopped'}")
+
+
+def main():
+    """
+    Main function to initialize the auto-clicker.
+    """
+    print("Press 's' to start/stop the auto-clicker.")
+    print("Press 'q' to quit.")
+
+    # Start the clicker thread
+    threading.Thread(target=clicker, daemon=True).start()
+
+    while True:
+        # Toggle clicking when 's' is pressed
+        if keyboard.is_pressed('s'):
+            toggle_clicking()
+            time.sleep(0.2)  # Avoid rapid toggling
+
+        # Exit the program when 'q' is pressed
+        if keyboard.is_pressed('q'):
+            print("Exiting auto-clicker.")
+            break
+
+
+if __name__ == "__main__":
+    main()
